@@ -61,7 +61,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     const state = await NetInfo.fetch();
 
     if (!state.isConnected) {
-      showToast("error", "Authentication Error", "Cannot log out while offline")
+      showToast("error", "Network error!", "Cannot log out while offline")
     }
 
     await account.deleteSession("current");

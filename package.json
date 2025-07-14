@@ -1,5 +1,5 @@
 {
-  "name": "shelfie_app",
+  "name": "book-keeper",
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
@@ -25,7 +25,9 @@
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",
     "react-native-toast-message": "^2.3.3",
-    "react-native-url-polyfill": "^2.0.0"
+    "react-native-url-polyfill": "^2.0.0",
+    "expo-splash-screen": "~0.30.10",
+    "react-native-reanimated": "~3.17.4"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

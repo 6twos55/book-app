@@ -54,7 +54,7 @@ const BookDetails = () => {
       await getBooks();
       setModalActive(false);
     } catch (error: any) {
-      showToast("error", "Update Error", error.message);
+      showToast("error", "You're offline!", error.message);
     } finally {
       setLoading(false);
     }
@@ -68,7 +68,7 @@ const BookDetails = () => {
       setBook(null);
       router.replace("/books");
     } catch (error: any) {
-      showToast("error", "Delete Error", error.message);
+      showToast("error", "You're offline!", error.message);
     } finally {
       setLoading(false);
     }

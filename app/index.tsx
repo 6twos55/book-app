@@ -1,54 +1,59 @@
-import { Image, StyleSheet } from "react-native";
-import React from "react";
+import { Image, StyleSheet, Text } from "react-native";
 import Logo from "../assets/images/logo.png";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { useUser } from "../hooks/useUser";
 
 import ThemedView from "../components/ThemedView";
 import ThemedText from "../components/ThemedText";
 import Spacer from "../components/Spacer";
 import ThemedLoader from "../components/ThemedLoader";
+import ThemedButton from "../components/ThemedButton";
 
 const Home = () => {
   const { user, authChecked } = useUser();
+  const router = useRouter();
 
   return (
-    <ThemedView style={styles.container}>
-      <Image source={Logo} style={{ height: 130, width: 130 }} />
+    <ThemedView safe style={styles.container}>
+      <Spacer />
+      <Spacer />
+      <Spacer />
       <Spacer height={20} />
 
+      <Image source={Logo} style={{ height: 130, width: 130 }} />
+      <Spacer height={30} />
+
       <ThemedText style={styles.title} title={true}>
-        The Number 1
+        Book Keeper
       </ThemedText>
 
       <Spacer height={10} />
       <ThemedText>Reading List App</ThemedText>
+      <Spacer />
+      <Spacer />
+      <Spacer />
+      <Spacer />
+      <Spacer />
       <Spacer />
 
       {!authChecked && !user ? (
         <ThemedLoader bare />
       ) : user === null ? (
         <>
-          <Link href="/login" style={styles.link}>
-            <ThemedText>Login</ThemedText>
-          </Link>
+          <ThemedText>You're not authenticated</ThemedText>
+          <Spacer height={20} />
 
-          <Link href="/register" style={styles.link}>
-            <ThemedText>Register</ThemedText>
-          </Link>
+          <ThemedButton onPress={() => router.push("/login")}>
+            <Text style={{ color: "#fff" }}>Sign back in</Text>
+          </ThemedButton>
         </>
       ) : (
         user !== null && (
-          <Link href="/profile" style={styles.link}>
-            <ThemedText>Your Profile</ThemedText>
+          <Link href="/books" style={styles.link}>
+            <ThemedText>Continue reading</ThemedText>
           </Link>
         )
       )}
-
-      {/* 
-        Make screen look better
-      */}
-
     </ThemedView>
   );
 };
@@ -59,11 +64,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
   },
   title: {
     fontWeight: "bold",
-    fontSize: 22,
+    fontSize: 30,
   },
   link: {
     marginVertical: 10,

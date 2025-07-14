@@ -28,14 +28,18 @@ const Register = () => {
 
   const handleSubmit = async () => {
     if (!email.trim() || !password.trim()) {
-      return showToast("info", "Register Info", "All input fields must be filled");
+      return showToast(
+        "info",
+        "Register Info",
+        "All input fields must be filled"
+      );
     }
 
     try {
       await register(email, password);
       router.replace("/profile");
     } catch (error: any) {
-      showToast("error", "Register Error", error.message)
+      showToast("error", "Register Error", error.message);
     }
   };
 
@@ -56,23 +60,31 @@ const Register = () => {
           value={email}
         />
 
-        <PasswordEyeView>
-          <ThemedTextInput
-            placeholder="Password"
-            onChangeText={setPassword}
-            value={password}
-            secureTextEntry={hidden}
-            autoCorrect={false}
-            autoCapitalize="none"
-          />
-
-          <Pressable onPress={() => setHidden((prev) => !prev)}>
-            <Ionicons
-              name={hidden ? "eye-off" : "eye"}
-              size={20}
+        <Pressable onPress={(e) => e.stopPropagation()}>
+          <PasswordEyeView>
+            <ThemedTextInput
+              placeholder="Password"
+              onChangeText={setPassword}
+              value={password}
+              secureTextEntry={hidden}
+              autoCorrect={false}
+              autoCapitalize="none"
+              style={{ width: "85%" }}
             />
-          </Pressable>
-        </PasswordEyeView>
+
+            <Pressable
+              onPress={() => setHidden((prev) => !prev)}
+              style={{
+                height: "100%",
+                width: "15%",
+                alignItems: "center",
+                paddingTop: 17.5,
+              }}
+            >
+              <Ionicons name={hidden ? "eye-off" : "eye"} size={20} />
+            </Pressable>
+          </PasswordEyeView>
+        </Pressable>
         <Spacer />
 
         <ThemedButton onPress={handleSubmit} style={{ paddingHorizontal: 30 }}>

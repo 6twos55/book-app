@@ -22,23 +22,35 @@ const Books = () => {
       <Spacer height={20} />
 
       {books ? (
-        <FlatList
-          data={books}
-          keyExtractor={(item) => item.$id}
-          contentContainerStyle={styles.list}
-          renderItem={({ item }) => (
-            <Pressable onPress={() => router.push(`/books/${item.$id}`)}>
-              <ThemedCard style={styles.card}>
-                <ThemedText style={styles.title}>{item.title}</ThemedText>
-                <ThemedText sub>Written by {item.author}</ThemedText>
-              </ThemedCard>
+        books.length > 0 ? (
+          <FlatList
+            data={books}
+            keyExtractor={(item) => item.$id}
+            contentContainerStyle={styles.list}
+            renderItem={({ item }) => (
+              <Pressable onPress={() => router.push(`/books/${item.$id}`)}>
+                <ThemedCard style={styles.card}>
+                  <ThemedText style={styles.title}>{item.title}</ThemedText>
+                  <ThemedText sub>Written by {item.author}</ThemedText>
+                </ThemedCard>
+              </Pressable>
+            )}
+          />
+        ) : (
+          <ThemedView
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          >
+            <ThemedText style={[styles.heading, { fontSize: 18 }]}>Book list is empty, shall we fix that?</ThemedText>
+            <Spacer height={5} />
+            
+            <Pressable onPress={() => router.push("/create")} style={{ padding: 10 }}>
+              <ThemedText>Go to create screen</ThemedText>
             </Pressable>
-          )}
-        />
+          </ThemedView>
+        )
       ) : (
         <ThemedLoader />
       )}
-      
     </ThemedView>
   );
 };

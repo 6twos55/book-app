@@ -1,9 +1,16 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { client, databases } from "../lib/appwrite";
 import { ID, Models, Permission, Query, Role } from "appwrite";
 import { useUser } from "../hooks/useUser";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
+import { showToast } from "../utils/toast";
 
 interface IBook {
   title: string;
@@ -12,6 +19,7 @@ interface IBook {
 }
 
 interface BookContextProps {
+  networkStatus: boolean | null;
   books: Models.Document[];
   getBooks: () => Promise<void>;
   getBookById: (id: string) => Promise<Models.Document | undefined>;
@@ -30,10 +38,11 @@ const COLLECTION_ID = "686e3811001f21f2f28b";
 export const BooksContext = createContext<BookContextProps | null>(null);
 
 export const BooksProvider = ({ children }: BooksProviderProps) => {
+  const [networkStatus, setNetworkStatus] = useState<boolean | null>(false);
   const [books, setBooks] = useState<Models.Document[]>([]);
   const { user } = useUser();
 
-  const getBooks = async () => {
+  const getBooks = useCallback(async () => {
     try {
       const response = await databases.listDocuments(
         DATABASE_ID,
@@ -48,9 +57,13 @@ export const BooksProvider = ({ children }: BooksProviderProps) => {
         JSON.stringify(response.documents)
       );
     } catch (error: any) {
-      throw new Error(error.message);
+      const localBooks = await AsyncStorage.getItem("bookList");
+      if (localBooks) {
+        setBooks(JSON.parse(localBooks));
+        showToast("info", "You're offline!", "Showing cached content");
+      }
     }
-  };
+  }, [user]);
 
   const getBookById = async (id: string) => {
     const localBooks = await AsyncStorage.getItem("bookList");
@@ -134,38 +147,27 @@ export const BooksProvider = ({ children }: BooksProviderProps) => {
   };
 
   useEffect(() => {
-    const loadBooks = async () => {
-      const localBooks = await AsyncStorage.getItem("bookList");
+    if (user) {
+      getBooks();
+    }
 
-      const unsubscribe = NetInfo.addEventListener((state) => {
-        if (user) {
-          // console.log("Is connected?", state.isConnected);
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      if (user) {
+        getBooks();
+      }
 
-          if (!state.isConnected && localBooks) {
-            setBooks(JSON.parse(localBooks));
-          } else if (state.isConnected || !localBooks) {
-            getBooks();
-          }
-        } else {
-          setBooks([]);
-        }
-      });
-
-      return unsubscribe;
-    };
-
-    const unsubscribePromise = loadBooks();
+      setNetworkStatus(state.isConnected);
+    });
 
     return () => {
-      unsubscribePromise.then((unsubscribe) => {
-        unsubscribe();
-      });
+      unsubscribe();
     };
-  }); // removing dependency array makes offline message spawn unstoppably. Find better fix than commenting. (Or check if it's normal.)
+  }, [user, getBooks]);
 
   return (
     <BooksContext.Provider
       value={{
+        networkStatus,
         books,
         getBooks,
         getBookById,

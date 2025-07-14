@@ -25,7 +25,7 @@ const Create = () => {
 
   const handleSubmit = async () => {
     if (!title.trim() || !author.trim() || !description.trim()) {
-      return showToast("info", "Form Info", "All input fields must be filled");
+      return showToast("info", "Empty fields!", "All input fields must be filled");
     }
 
     setLoading(true);
@@ -37,7 +37,7 @@ const Create = () => {
       setDescription("");
       router.replace("/books");
     } catch (error: any) {
-      showToast("error", "Create Error", error.message);
+      showToast("error", "You're offline!", error.message);
     } finally {
       setLoading(false);
     }

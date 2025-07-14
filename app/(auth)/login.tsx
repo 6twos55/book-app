@@ -56,23 +56,31 @@ const Login = () => {
           value={email}
         />
 
-        <PasswordEyeView>
-          <ThemedTextInput
-            placeholder="Password"
-            onChangeText={setPassword}
-            value={password}
-            secureTextEntry={hidden}
-            autoCorrect={false}
-            autoCapitalize="none"
-          />
-
-          <Pressable onPress={() => setHidden((prev) => !prev)}>
-            <Ionicons
-              name={hidden ? "eye-off" : "eye"}
-              size={20}
+        <Pressable onPress={(e) => e.stopPropagation()}>
+          <PasswordEyeView>
+            <ThemedTextInput
+              placeholder="Password"
+              onChangeText={setPassword}
+              value={password}
+              secureTextEntry={hidden}
+              autoCorrect={false}
+              autoCapitalize="none"
+              style={{ width: "85%" }}
             />
-          </Pressable>
-        </PasswordEyeView>
+
+            <Pressable
+              onPress={() => setHidden((prev) => !prev)}
+              style={{
+                height: "100%",
+                width: "15%",
+                alignItems: "center",
+                paddingTop: 17.5
+              }}
+            >
+              <Ionicons name={hidden ? "eye-off" : "eye"} size={20} />
+            </Pressable>
+          </PasswordEyeView>
+        </Pressable>
         <Spacer />
 
         <ThemedButton onPress={handleSubmit} style={{ paddingHorizontal: 30 }}>

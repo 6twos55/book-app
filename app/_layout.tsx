@@ -4,8 +4,6 @@ import { StatusBar } from "expo-status-bar";
 import { UserProvider } from "../contexts/UserContext";
 import { BooksProvider } from "../contexts/BooksContext";
 import Toast from "react-native-toast-message";
-import { toastConfig } from "../utils/toastConfig";
-
 
 const RootLayout = () => {
   return (
@@ -22,7 +20,7 @@ const RootLayout = () => {
           <Stack.Screen name="(auth)" />
           <Stack.Screen name="(dashboard)" />
         </Stack>
-        <Toast config={toastConfig} />
+        <Toast />
       </BooksProvider>
     </UserProvider>
   );

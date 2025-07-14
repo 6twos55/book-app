@@ -20,7 +20,6 @@ const PasswordEyeView = ({ style, ...props }: PasswordEyeViewProps) => {
           alignItems: "center",
           justifyContent: "space-between",
           width: "80%",
-          paddingRight: 15,
           marginBottom: 20,
         },
         style,
